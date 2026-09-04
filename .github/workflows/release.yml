@@ -1,9 +1,7 @@
-name: Release extension
+name: Build and release extension
 
 on:
   push:
-    tags:
-      - "v*"
 
 permissions:
   contents: write
@@ -25,6 +23,7 @@ jobs:
         run: npm test
 
       - name: Verify release version
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
@@ -37,10 +36,15 @@ jobs:
           fi
 
       - name: Package extension
-        env:
-          RELEASE_TAG: ${{ github.ref_name }}
+        id: package
         run: |
-          archive="tab-reuse-${RELEASE_TAG}.zip"
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            build_id="$GITHUB_REF_NAME"
+          else
+            build_id="${GITHUB_SHA::7}"
+          fi
+
+          archive="tab-reuse-${build_id}.zip"
           mkdir -p dist
           zip -j "dist/$archive" \
             manifest.json \
@@ -50,13 +54,22 @@ jobs:
             README.md
           cd dist
           sha256sum "$archive" > "$archive.sha256"
+          echo "archive=$archive" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tab-reuse-${{ github.sha }}
+          path: dist/
+          if-no-files-found: error
 
       - name: Create GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ github.ref_name }}" \
-            dist/tab-reuse-${{ github.ref_name }}.zip \
-            dist/tab-reuse-${{ github.ref_name }}.zip.sha256 \
+            "dist/${{ steps.package.outputs.archive }}" \
+            "dist/${{ steps.package.outputs.archive }}.sha256" \
             --generate-notes \
             --title "Tab Reuse ${{ github.ref_name }}"

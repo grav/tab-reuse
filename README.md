@@ -44,6 +44,7 @@ git tag v0.2.0
 git push origin v0.2.0
 ```
 
-The release workflow runs the tests, packages only the extension runtime files,
-and publishes the ZIP and its SHA-256 checksum to a GitHub Release. The workflow
-fails if the tag and manifest versions do not match.
+Every pushed commit runs the tests, packages only the extension runtime files,
+and uploads the ZIP and its SHA-256 checksum as a workflow artifact. A matching
+version tag additionally publishes those files to a GitHub Release. Tagged
+builds fail if the tag and manifest versions do not match.
