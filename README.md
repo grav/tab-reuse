@@ -15,7 +15,7 @@ to right. Pinned tabs in other windows are never reused. Matching is exact, so
 ## Install
 
 Download the ZIP from the
-[latest GitHub release](https://github.com/grav/tab-reuse/releases/latest),
+[latest automated build](https://github.com/grav/tab-reuse/releases/tag/latest),
 extract it, then:
 
 1. Open `chrome://extensions`.
@@ -45,6 +45,7 @@ git push origin v0.2.0
 ```
 
 Every pushed commit runs the tests, packages only the extension runtime files,
-and uploads the ZIP and its SHA-256 checksum as a workflow artifact. A matching
-version tag additionally publishes those files to a GitHub Release. Tagged
-builds fail if the tag and manifest versions do not match.
+and uploads the ZIP and its SHA-256 checksum as a workflow artifact. Pushes to
+`main` also update the rolling `latest` prerelease. A matching version tag
+publishes a stable, versioned GitHub Release. Tagged builds fail if the tag and
+manifest versions do not match.
