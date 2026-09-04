@@ -12,11 +12,15 @@ Only pinned tabs in the window where the link opens are considered, from left
 to right. Pinned tabs in other windows are never reused. Matching is exact, so
 `github.com` and `gist.github.com` are different hostnames.
 
-## Install locally
+## Install
+
+Download the ZIP from the
+[latest GitHub release](https://github.com/grav/tab-reuse/releases/latest),
+extract it, then:
 
 1. Open `chrome://extensions`.
 2. Enable **Developer mode**.
-3. Click **Load unpacked** and select this directory.
+3. Click **Load unpacked** and select the extracted directory.
 
 The extension handles HTTP and HTTPS links clicked in webpages, including links
 that normally open in a new tab. It also handles new tabs opened by external
@@ -29,3 +33,17 @@ new tab.
 ```sh
 npm test
 ```
+
+## Release
+
+Update the version in `manifest.json` and `package.json`, commit it, then push a
+matching tag:
+
+```sh
+git tag v0.2.0
+git push origin v0.2.0
+```
+
+The release workflow runs the tests, packages only the extension runtime files,
+and publishes the ZIP and its SHA-256 checksum to a GitHub Release. The workflow
+fails if the tag and manifest versions do not match.
