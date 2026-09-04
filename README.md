@@ -1,0 +1,31 @@
+# Tab Reuse
+
+A Chrome extension that sends a clicked link to the first pinned tab with the
+same hostname. For example, clicking `https://github.com/foobar` focuses and
+navigates a pinned tab currently showing `https://github.com/baz`.
+
+Links opened into Chrome from other applications—such as Terminal, Slack, or
+Mail—are handled too. Chrome briefly creates a new tab; the extension routes
+its URL to the matching pinned tab and closes the redundant tab.
+
+Only pinned tabs in the window where the link opens are considered, from left
+to right. Pinned tabs in other windows are never reused. Matching is exact, so
+`github.com` and `gist.github.com` are different hostnames.
+
+## Install locally
+
+1. Open `chrome://extensions`.
+2. Enable **Developer mode**.
+3. Click **Load unpacked** and select this directory.
+
+The extension handles HTTP and HTTPS links clicked in webpages, including links
+that normally open in a new tab. It also handles new tabs opened by external
+applications. Pages where Chrome does not allow content scripts, such as
+`chrome://` pages and the Chrome Web Store, are still covered when they open a
+new tab.
+
+## Test
+
+```sh
+npm test
+```

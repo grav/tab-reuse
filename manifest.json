@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Reuse",
+  "version": "0.1.0",
+  "description": "Open links in an existing pinned tab when its hostname matches.",
+  "permissions": ["tabs"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
