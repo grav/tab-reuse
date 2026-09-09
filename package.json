@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "copy-extension": "bash scripts/copy-extension.sh",
     "test": "node --test"
   }
 }

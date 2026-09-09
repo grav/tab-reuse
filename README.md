@@ -4,6 +4,10 @@ A Chrome extension that sends a clicked link to the first pinned tab with the
 same hostname. For example, clicking `https://github.com/foobar` focuses and
 navigates a pinned tab currently showing `https://github.com/baz`.
 
+Clicks within the current hostname are left to the website, preserving in-app
+actions and navigation. For links to other hostnames, clicks canceled by the
+website are also left alone.
+
 Links opened into Chrome from other applications—such as Terminal, Slack, or
 Mail—are handled too. Chrome briefly creates a new tab; the extension routes
 its URL to the matching pinned tab and closes the redundant tab.
@@ -29,6 +33,18 @@ applications. Pages where Chrome does not allow content scripts, such as
 new tab.
 
 ## Test
+
+For local development, copy the runtime files to
+`~/.local/share/chromium-extensions/tab-reuse`:
+
+```sh
+npm run copy-extension
+```
+
+The script replaces an existing destination symlink with a regular directory.
+Load that directory as an unpacked extension. After each code change, run the
+script again, reload the extension in `chrome://extensions`, and refresh the
+affected pages.
 
 ```sh
 npm test

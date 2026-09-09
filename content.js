@@ -29,6 +29,8 @@ function clickedAnchor(event) {
   try {
     const url = new URL(anchor.href, document.baseURI)
     if (!["http:", "https:"].includes(url.protocol)) return null
+    // In-app links may represent actions rather than navigation.
+    if (url.hostname === window.location.hostname) return null
     if (!pinnedHostnames.has(url.hostname.toLowerCase())) return null
     return { url: url.href, target: anchor.target }
   } catch {
@@ -57,7 +59,8 @@ document.addEventListener(
       openNormally(link)
     }
   },
-  true,
+  // Let the app handle clicks (and cancel navigation) before we reuse a tab.
+  false,
 )
 
 function openNormally(link) {
